@@ -243,7 +243,7 @@
       { "prob": 50, "group": "cig_box_cigarette_1_20" },
       { "item": "matches", "prob": 45, "charges": [ 1, 20 ] },
       { "item": "ref_matches", "prob": 45, "charges": [ 1, 32 ] },
-      { "item": "rolling_paper", "prob": 10, "charges": [ 1, 30 ] },
+      { "item": "rolling_paper", "prob": 10, "count": [ 1, 30 ] },
       { "item": "bottle_glass", "prob": 70 },
       { "item": "shot_glass", "prob": 60 },
       { "item": "bucket", "prob": 5 },
@@ -337,7 +337,7 @@
     "type": "item_group",
     "items": [
       { "prob": 15, "group": "cig_box_cigarette_1_20" },
-      { "item": "rolling_paper", "prob": 7, "charges": [ 1, 30 ] },
+      { "item": "rolling_paper", "prob": 7, "count": [ 1, 30 ] },
       [ "wrapper", 35 ],
       [ "wrapper_foil", 2 ],
       [ "ceramic_plate", 40 ],
@@ -1831,209 +1831,6 @@
   },
   {
     "type": "item_group",
-    "id": "flour_various",
-    "subtype": "distribution",
-    "entries": [
-      { "prob": 6, "group": "flour_bottle_plastic" },
-      { "prob": 6, "group": "flour_bottle_glass" },
-      { "prob": 12, "group": "flour_bag_plastic" },
-      { "prob": 6, "group": "flour_bag_paper" },
-      { "prob": 1, "group": "flour_wheat_free_bottle_plastic" },
-      { "prob": 1, "group": "flour_wheat_free_bottle_glass" },
-      { "prob": 2, "group": "flour_wheat_free_bag_plastic" },
-      { "prob": 2, "group": "flour_wheat_free_bag_paper" },
-      { "prob": 3, "group": "bread_flour_bag_plastic" },
-      { "prob": 3, "group": "bread_flour_bag_paper" }
-    ]
-  },
-  {
-    "type": "item_group",
-    "id": "flour_various_full",
-    "subtype": "distribution",
-    "entries": [
-      { "prob": 6, "group": "flour_bag_plastic_full" },
-      { "prob": 9, "group": "flour_bag_paper_full" },
-      { "prob": 1, "group": "flour_wheat_free_bag_plastic_full" },
-      { "prob": 2, "group": "flour_wheat_free_bag_paper_full" },
-      { "prob": 2, "group": "bread_flour_bag_plastic_full" },
-      { "prob": 3, "group": "bread_flour_bag_paper_full" }
-    ]
-  },
-  {
-    "type": "item_group",
-    "id": "flour_bag_plastic_full",
-    "subtype": "collection",
-    "container-item": "bag_plastic_small",
-    "entries": [ { "item": "flour", "container-item": "null", "count": 20 } ]
-  },
-  {
-    "type": "item_group",
-    "id": "flour_bag_paper_full",
-    "subtype": "collection",
-    "container-item": "bag_paper_powder",
-    "entries": [ { "item": "flour", "container-item": "null", "count": 100 } ]
-  },
-  {
-    "type": "item_group",
-    "id": "flour_wheat_free_bag_plastic_full",
-    "subtype": "collection",
-    "container-item": "bag_plastic_small",
-    "entries": [ { "item": "flour_wheat_free", "container-item": "null", "count": 16 } ]
-  },
-  {
-    "type": "item_group",
-    "id": "flour_wheat_free_bag_paper_full",
-    "subtype": "collection",
-    "container-item": "bag_paper_powder",
-    "entries": [ { "item": "flour_wheat_free", "container-item": "null", "count": 60 } ]
-  },
-  {
-    "type": "item_group",
-    "id": "bread_flour_bag_plastic_full",
-    "subtype": "collection",
-    "container-item": "bag_plastic_small",
-    "entries": [ { "item": "bread_flour", "container-item": "null", "count": 4 } ]
-  },
-  {
-    "type": "item_group",
-    "id": "bread_flour_bag_paper_full",
-    "subtype": "collection",
-    "container-item": "bag_paper_powder",
-    "entries": [ { "item": "bread_flour", "container-item": "null", "count": 16 } ]
-  },
-  {
-    "type": "item_group",
-    "id": "flour_bulk",
-    "subtype": "distribution",
-    "entries": [
-      { "prob": 1, "group": "flour_bag_plastic" },
-      { "prob": 5, "group": "flour_bag_paper" },
-      { "prob": 3, "group": "flour_bag_paper_bulk" },
-      { "prob": 3, "group": "flour_bag_paper_50lb" },
-      { "prob": 1, "group": "flour_wheat_free_bag_plastic" },
-      { "prob": 2, "group": "flour_wheat_free_bag_paper" },
-      { "prob": 1, "group": "flour_wheat_free_bag_paper_bulk" },
-      { "prob": 1, "group": "flour_wheat_free_bag_paper_50lb" },
-      { "prob": 1, "group": "bread_flour_bag_plastic" },
-      { "prob": 5, "group": "bread_flour_bag_paper" },
-      { "prob": 3, "group": "bread_flour_bag_paper_bulk" },
-      { "prob": 3, "group": "bread_flour_bag_paper_50lb" }
-    ]
-  },
-  {
-    "type": "item_group",
-    "id": "flour_bottle_plastic",
-    "subtype": "collection",
-    "container-item": "bottle_plastic_seasoning",
-    "entries": [ { "item": "flour", "container-item": "null", "count": [ 2, 20 ] } ]
-  },
-  {
-    "type": "item_group",
-    "id": "flour_bottle_glass",
-    "subtype": "collection",
-    "container-item": "bottle_glass_seasoning",
-    "entries": [ { "item": "flour", "container-item": "null", "count": [ 2, 20 ] } ]
-  },
-  {
-    "type": "item_group",
-    "id": "flour_bag_paper",
-    "subtype": "collection",
-    "container-item": "bag_paper_powder",
-    "entries": [ { "item": "flour", "container-item": "null", "count": [ 10, 100 ] } ]
-  },
-  {
-    "type": "item_group",
-    "id": "flour_bag_paper_bulk",
-    "subtype": "collection",
-    "container-item": "bag_paper_powder_bulk",
-    "entries": [ { "item": "flour", "container-item": "null", "count": [ 10, 400 ] } ]
-  },
-  {
-    "type": "item_group",
-    "id": "flour_bag_plastic",
-    "subtype": "collection",
-    "container-item": "bag_plastic_small",
-    "entries": [ { "item": "flour", "container-item": "null", "count": [ 2, 20 ] } ]
-  },
-  {
-    "type": "item_group",
-    "id": "flour_bag_paper_50lb",
-    "subtype": "collection",
-    "container-item": "bag_paper_powder_50lb",
-    "entries": [ { "item": "flour", "container-item": "null", "count": [ 10, 1850 ] } ]
-  },
-  {
-    "type": "item_group",
-    "id": "flour_wheat_free_bottle_plastic",
-    "subtype": "collection",
-    "container-item": "bottle_plastic_seasoning",
-    "entries": [ { "item": "flour_wheat_free", "container-item": "null", "count": [ 2, 16 ] } ]
-  },
-  {
-    "type": "item_group",
-    "id": "flour_wheat_free_bottle_glass",
-    "subtype": "collection",
-    "container-item": "bottle_glass_seasoning",
-    "entries": [ { "item": "flour_wheat_free", "container-item": "null", "count": [ 2, 16 ] } ]
-  },
-  {
-    "type": "item_group",
-    "id": "flour_wheat_free_bag_paper",
-    "subtype": "collection",
-    "container-item": "bag_paper_powder",
-    "entries": [ { "item": "flour_wheat_free", "container-item": "null", "count": [ 5, 60 ] } ]
-  },
-  {
-    "type": "item_group",
-    "id": "flour_wheat_free_bag_paper_bulk",
-    "subtype": "collection",
-    "container-item": "bag_paper_powder_bulk",
-    "entries": [ { "item": "flour_wheat_free", "container-item": "null", "count": [ 5, 260 ] } ]
-  },
-  {
-    "type": "item_group",
-    "id": "flour_wheat_free_bag_plastic",
-    "subtype": "collection",
-    "container-item": "bag_plastic_small",
-    "entries": [ { "item": "flour_wheat_free", "container-item": "null", "count": [ 2, 12 ] } ]
-  },
-  {
-    "type": "item_group",
-    "id": "flour_wheat_free_bag_paper_50lb",
-    "subtype": "collection",
-    "container-item": "bag_paper_powder_50lb",
-    "entries": [ { "item": "flour_wheat_free", "container-item": "null", "count": [ 5, 1200 ] } ]
-  },
-  {
-    "type": "item_group",
-    "id": "bread_flour_bag_paper",
-    "subtype": "collection",
-    "container-item": "bag_paper_powder",
-    "entries": [ { "item": "bread_flour", "container-item": "null", "count": [ 2, 16 ] } ]
-  },
-  {
-    "type": "item_group",
-    "id": "bread_flour_bag_plastic",
-    "subtype": "collection",
-    "container-item": "bag_plastic_small",
-    "entries": [ { "item": "bread_flour", "container-item": "null", "count": [ 1, 4 ] } ]
-  },
-  {
-    "type": "item_group",
-    "id": "bread_flour_bag_paper_bulk",
-    "subtype": "collection",
-    "container-item": "bag_paper_powder_bulk",
-    "entries": [ { "item": "bread_flour", "container-item": "null", "count": [ 2, 65 ] } ]
-  },
-  {
-    "type": "item_group",
-    "id": "bread_flour_bag_paper_50lb",
-    "subtype": "collection",
-    "container-item": "bag_paper_powder_50lb",
-    "entries": [ { "item": "bread_flour", "container-item": "null", "count": [ 2, 300 ] } ]
-  },
-  {
-    "type": "item_group",
     "id": "potato_bag_plastic_1",
     "subtype": "collection",
     "container-item": "bag_canvas",
@@ -2469,18 +2266,6 @@
   },
   {
     "type": "item_group",
-    "id": "brown_bread_in_bag",
-    "subtype": "collection",
-    "entries": [ { "item": "brown_bread", "entry-wrapper": "bag_plastic", "count": [ 0, 10 ] } ]
-  },
-  {
-    "type": "item_group",
-    "id": "brown_bread_in_bag_full",
-    "subtype": "collection",
-    "entries": [ { "item": "brown_bread", "entry-wrapper": "bag_plastic", "count": 10 } ]
-  },
-  {
-    "type": "item_group",
     "id": "brioche_box_small_6",
     "subtype": "collection",
     "container-item": "box_small",
@@ -2847,13 +2632,6 @@
   },
   {
     "type": "item_group",
-    "id": "offal_pickled_jar_glass_sealed_2",
-    "subtype": "collection",
-    "container-item": "jar_glass_sealed",
-    "entries": [ { "item": "offal_pickled", "container-item": "null", "count": 2 } ]
-  },
-  {
-    "type": "item_group",
     "id": "nachos_bowl_plastic_full",
     "subtype": "collection",
     "container-item": "bowl_plastic",
@@ -2865,13 +2643,6 @@
     "subtype": "collection",
     "container-item": "bag_plastic_small",
     "entries": [ { "item": "tortilla_corn", "container-item": "null", "count": 25 } ]
-  },
-  {
-    "type": "item_group",
-    "id": "tortilla_flour_bag_plastic_full",
-    "subtype": "collection",
-    "container-item": "bag_plastic_small",
-    "entries": [ { "item": "tortilla_flour", "container-item": "null", "count": 25 } ]
   },
   {
     "type": "item_group",

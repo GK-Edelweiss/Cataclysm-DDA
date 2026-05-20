@@ -109,6 +109,10 @@
     "type": "json_flag"
   },
   {
+    "id": "ALLOWS_GASTROPOD_FOOT",
+    "type": "json_flag"
+  },
+  {
     "id": "ALLOWS_TALONS",
     "type": "json_flag"
   },
@@ -2882,6 +2886,14 @@
     "id": "CANNOT_GAIN_EFFECTS",
     "type": "json_flag",
     "//": "Creatures with this flag will not gain any new effects or gain extra time on their current ones."
+  },
+  {
+    "id": "NUMB",
+    "type": "json_flag"
+  },
+  {
+    "id": "PSYCHOPATH",
+    "type": "json_flag"
   },
   {
     "id": "BANK_NETWORKED",

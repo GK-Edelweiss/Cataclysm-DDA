@@ -686,10 +686,14 @@ void uilist::calc_data()
     }
 
     float padding = 2.0f * s.CellPadding.x;
-    calculated_hotkey_width = ImGui::CalcTextSize( "M" ).x;
+    calculated_hotkey_width = 0.0;
     calculated_label_width = 0.0;
     calculated_secondary_width = 0.0;
     for( const uilist_entry &entry : entries ) {
+        if( entry.hotkey.has_value() ) {
+            calculated_hotkey_width = std::max( calculated_hotkey_width,
+                                                calc_size( entry.hotkey.value().short_description() ).x );
+        }
         calculated_label_width = std::max( calculated_label_width, calc_size( entry.txt ).x );
         calculated_secondary_width = std::max( calculated_secondary_width,
                                                calc_size( entry.ctxt ).x );
@@ -766,7 +770,6 @@ void uilist::setup()
     calc_data();
 
     started = true;
-    recalc_start = true;
 }
 
 void uilist::reposition()
@@ -864,6 +867,8 @@ bool uilist::scrollby( const uilist::scroll_amount scrollby )
             callback->select( this );
         }
     }
+
+    need_to_scroll = true;
     return true;
 }
 
@@ -990,12 +995,10 @@ void uilist::query_once( input_context &ctxt, int timeout,
     const input_event event = ctxt.get_raw_input();
     ret_evt = event;
     const auto iter = keymap.find( ret_evt );
-    recalc_start = false;
 
-    if( scrollby( scroll_amount_from_action( ret_act ) ) ) {
-        need_to_scroll = true;
-        recalc_start = true;
-    } else if( filtering && ret_act == "UILIST.FILTER" ) {
+    scrollby( scroll_amount_from_action( ret_act ) );
+
+    if( filtering && ret_act == "UILIST.FILTER" ) {
         inputfilter();
     } else if( !categories.empty() && ( ret_act == "UILIST.LEFT" || ret_act == "UILIST.RIGHT" ) ) {
         switch_to_category = inc_clamp_wrap( current_category, ret_act == "UILIST.RIGHT",
@@ -1042,7 +1045,6 @@ void uilist::query_once( input_context &ctxt, int timeout,
         if( unhandled && allow_anykey ) {
             ret = UILIST_UNBOUND;
         } else if( unhandled && allow_additional ) {
-            recalc_start = true;
             for( const auto &it : additional_actions ) {
                 if( it.first == ret_act ) {
                     ret = UILIST_ADDITIONAL;

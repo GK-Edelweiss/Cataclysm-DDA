@@ -99,6 +99,7 @@ enum action_id : int;
 enum class recipe_filter_flags : int;
 enum class steed_type : int;
 enum npc_attitude : int;
+struct attention_plan;
 struct bionic;
 struct construction;
 struct dealt_projectile_attack;
@@ -124,7 +125,7 @@ const int CHARACTER_STAT_MIN = 4;
 const int CHARACTER_STAT_MAX = 20;
 
 const int CHARACTER_AGE_MIN = 16;
-const int CHARACTER_AGE_MAX = 55;
+const int CHARACTER_AGE_MAX = 100;
 
 const int NAME_CHARACTER_LIMIT = 50;
 
@@ -258,6 +259,7 @@ enum class blood_type {
     blood_A,
     blood_B,
     blood_AB,
+    blood_acid,
     num_bt
 };
 
@@ -778,8 +780,8 @@ class Character : public Creature, public visitable
         std::vector<aim_type> get_aim_types( const item &gun ) const;
         int point_shooting_limit( const item &gun ) const;
         double fastest_aiming_method_speed( const item &gun, double recoil,
-                                            const Target_attributes &target_attributes = Target_attributes(),
-                                            std::optional<std::reference_wrapper<const parallax_cache>> parallax_cache = std::nullopt ) const;
+                                            const Target_attributes &target_attributes,
+                                            const parallax_cache &parallaxes ) const;
         int most_accurate_aiming_method_limit( const item &gun ) const;
         double aim_factor_from_volume( const item &gun ) const;
         double aim_factor_from_length( const item &gun ) const;
@@ -801,8 +803,8 @@ class Character : public Creature, public visitable
         * Use a struct to avoid repeatedly calculate some modifiers that are actually persistent for aiming UI drawing.
         */
         double aim_per_move( const item &gun, double recoil,
-                             const Target_attributes &target_attributes = Target_attributes(),
-                             std::optional<std::reference_wrapper<const aim_mods_cache>> aim_cache = std::nullopt ) const;
+                             const Target_attributes &target_attributes,
+                             const aim_mods_cache &aim_cache ) const;
 
         int get_dodges_left() const;
         void set_dodges_left( int dodges );
@@ -1281,6 +1283,9 @@ class Character : public Creature, public visitable
         /** Actually hurt the player, hurts a body_part directly, no armor reduction */
         void apply_damage( Creature *source, bodypart_id hurt, int dam,
                            bool bypass_med = false ) override;
+        // checks if amount of specific wounds on bodypart is not higher than `limit`
+        // return false if more than limit
+        bool is_within_wound_limit_for_bp( bodypart_id bp, wound_type_id wound_id ) const;
         void apply_random_wound( bodypart_id bp, const damage_instance &d );
         /** Calls Creature::deal_damage and handles damaged effects (waking up, etc.) */
         dealt_damage_instance deal_damage( Creature *source, bodypart_id bp,
@@ -1915,8 +1920,19 @@ class Character : public Creature, public visitable
          */
         void mend_item( item_location &&obj, bool interactive = true );
 
+        /**
+         * Build the list of reload_option entries for selecting reload ammo
+         * for `base`. With `per_well_targets` false the function emits one
+         * option per item (base and each gunmod) plus one per loaded
+         * magazine, all carrying reload_option::pocket_index = -1, which
+         * routes execution through the first-compatible-well selection
+         * inside item::reload. With `per_well_targets` true it additionally
+         * walks every MAGAZINE_WELL pocket on the base item and on each
+         * gunmod, emitting per-well reload targets whose pocket_index
+         * identifies the specific well in target->contents.
+         */
         bool list_ammo( const item_location &base, std::vector<item::reload_option> &ammo_list,
-                        bool empty = true ) const;
+                        bool empty = true, bool per_well_targets = false ) const;
         /**
          * Select suitable ammo with which to reload the item
          * @param base Item to select ammo for
@@ -2330,7 +2346,7 @@ class Character : public Creature, public visitable
                                                 &locations ) const;
         units::mass weight_capacity() const override;
 
-        /* maximum you should ever be able to pick up ( i.e. with DANGEROUS_PICKUPS enabled) */
+        /* maximum you should ever be able to pick up */
         units::mass max_pickup_capacity() const;
         // total capacity of pockets in the player's top level of inventory.
         // bags-of-holding aside, this is the max volume the character can carry without changing what they're wearing/wielding.
@@ -2521,6 +2537,7 @@ class Character : public Creature, public visitable
 
         //sets all skills to 0 so that they're guaranteed to be in the map
         void zero_all_skills();
+        void set_all_skills( int lvl );
         float get_skill_level( const skill_id &ident ) const;
         float get_skill_level( const skill_id &ident, const item &context ) const;
         int get_knowledge_level( const skill_id &ident ) const;
@@ -3724,7 +3741,8 @@ class Character : public Creature, public visitable
         void make_all_craft( const recipe_id &id, int batch_size,
                              const std::optional<tripoint_bub_ms> &loc );
         /** consume components and create an active, in progress craft containing them */
-        void start_craft( craft_command &command, const std::optional<tripoint_bub_ms> &loc );
+        void start_craft( craft_command &command, const std::optional<tripoint_bub_ms> &loc,
+                          std::vector<attention_plan> plans = {} );
 
         struct craft_roll_data {
             float center;

@@ -1481,6 +1481,8 @@ CXIV
 cyber
 cybercop
 cyberdog
+Cyberframe
+Cyberframes
 Cyberiad
 cyberjunkie
 cybernetically
@@ -3023,6 +3025,7 @@ hosomaki
 Hoss
 hotcut
 hotcuts
+hotcutting
 hotkey
 hotkeys
 hotties
@@ -3726,6 +3729,7 @@ landshark
 Landstreicher
 Landwenn
 Lanesborough
+langets
 Lankan
 Lann
 Lanwenn
@@ -5204,6 +5208,7 @@ Pearlman
 pecorino
 pedipalps
 Pedro
+peening
 pekmez
 Pelleter
 pelmeni
@@ -5329,6 +5334,7 @@ PKers
 Plainfield
 Plainville
 planetside
+planishing
 plano
 plantkin
 plasticky
@@ -6996,6 +7002,7 @@ torvosaurus
 totipotent
 Toto
 töttchen
+touchmark
 Toudig
 tourmalines
 Touz
@@ -7094,6 +7101,7 @@ TsKBEM
 TsNIITochMash
 Tsu
 tsuba
+tsuka
 tsumi
 tsundere
 tsurugi

@@ -2,6 +2,7 @@
 #include <cstddef>
 #include <memory>
 #include <string>
+#include <string_view>
 #include <vector>
 #include <unordered_map>
 
@@ -99,6 +100,11 @@ class client
 #endif
         bool auto_size_frame_active();
         bool any_window_shown();
+
+        // True if ImGui is consuming mouse input (hover / drag / popup).
+        static bool want_capture_mouse();
+        // True if an ImGui text field or shortcut has keyboard focus.
+        static bool want_capture_keyboard();
 };
 
 void point_to_imvec2( point *src, ImVec2 *dest );
@@ -113,6 +119,9 @@ void set_scroll( scroll &s );
 void draw_colored_text( const std::string &original_text, const nc_color &color,
                         float wrap_width = 0.0F, bool *is_selected = nullptr,
                         bool *is_focused = nullptr, bool *is_hovered = nullptr );
+#ifndef TUI
+bool clear_pending();
+#endif
 void draw_colored_text( const std::string &original_text, nc_color &color,
                         float wrap_width = 0.0F, bool *is_selected = nullptr,
                         bool *is_focused = nullptr, bool *is_hovered = nullptr );
@@ -143,7 +152,7 @@ class window
         virtual void draw();
         virtual void on_resized() {}
         bool is_bounds_changed();
-        size_t get_text_width( const std::string &text );
+        size_t get_text_width( std::string_view text );
         size_t get_text_height( const char *text );
         size_t str_width_to_pixels( size_t len );
         size_t str_height_to_pixels( size_t len );

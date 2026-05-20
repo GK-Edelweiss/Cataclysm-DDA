@@ -35,6 +35,9 @@
 #include "calendar.h"
 #include "calendar_ui.h"
 #include "cata_path.h"
+#if defined(TILES) && defined(USE_SDL3)
+#include "cata_shader.h"
+#endif
 #include "cata_utility.h"
 #include "catacharset.h"
 #include "character.h"
@@ -296,6 +299,7 @@ std::string enum_to_string<debug_menu::debug_menu_index>( debug_menu::debug_menu
         case debug_menu::debug_menu_index::TALK_TOPIC: return "TALK_TOPIC";
         case debug_menu::debug_menu_index::IMGUI_DEMO: return "IMGUI_DEMO";
         case debug_menu::debug_menu_index::VEHICLE_EFFECTS: return "VEHICLE_EFFECTS";
+        case debug_menu::debug_menu_index::RELOAD_GPU_SHADERS: return "RELOAD_GPU_SHADERS";
         // *INDENT-ON*
         case debug_menu::debug_menu_index::last:
             break;
@@ -991,6 +995,9 @@ static int info_uilist()
         { uilist_entry( debug_menu_index::GENERATE_EFFECT_LIST, true, 'L', _( "Generate effect list" ) ) },
         { uilist_entry( debug_menu_index::WRITE_CITY_LIST, true, 'C', _( "Write city list to cities.output" ) ) },
         { uilist_entry( debug_menu_index::IMGUI_DEMO, true, 'u', _( "Open ImGui demo screen" ) ) },
+#if defined(TILES) && defined(USE_SDL3)
+        { uilist_entry( debug_menu_index::RELOAD_GPU_SHADERS, true, 'P', _( "Reload GPU shaders" ) ) },
+#endif
     };
 
     return uilist( _( "Info…" ), uilist_initializer );
@@ -2276,8 +2283,9 @@ static void character_edit_desc_menu( Character &you )
         break;
         case 2: {
             int result = you.base_age();
-            if( query_int( result, true, _( "Enter age in years.  Minimum 16, maximum 55" ) ) && result > 0 ) {
-                you.set_base_age( clamp( result, 16, 55 ) );
+            if( query_int( result, true, _( "Enter age in years.  Minimum %d, maximum %d" ), CHARACTER_AGE_MIN,
+                           CHARACTER_AGE_MAX ) && result > 0 ) {
+                you.set_base_age( clamp( result, CHARACTER_AGE_MIN, CHARACTER_AGE_MAX ) );
             }
         }
         break;
@@ -2653,7 +2661,7 @@ static void character_edit_menu()
         case D_MISSION_ADD: {
             uilist types;
             types.text = _( "Choose mission type" );
-            const auto all_missions = mission_type::get_all();
+            const auto &all_missions = mission_type::get_all();
             std::vector<const mission_type *> mts;
             for( size_t i = 0; i < all_missions.size(); i++ ) {
                 types.addentry( i, true, -1, all_missions[i].tname() );
@@ -2889,11 +2897,13 @@ static void faction_edit_menu()
          << string_format( _( "Trust: %d" ), fac->trusts_u ) << std::endl;
     data << string_format( _( "Known by you: %s" ), fac->known_by_u ? "true" : "false" ) << " | "
          << string_format( _( "Lone wolf: %s" ), fac->lone_wolf_faction ? "true" : "false" ) << std::endl;
+    data << string_format( _( "Steal mode: %s" ),
+                           fac->steal_persist ? ( *fac->steal_persist ? "thief" : "honest" ) : "ask" ) << std::endl;
 
     nmenu.text = data.str();
 
     enum {
-        D_WEALTH, D_SIZE, D_POWER, D_FOOD, D_OPINION, D_KNOWN, D_LONE
+        D_WEALTH, D_SIZE, D_POWER, D_FOOD, D_OPINION, D_KNOWN, D_LONE, D_THIEF
     };
     nmenu.addentry( D_WEALTH, true, 'w', "%s", _( "Set wealth" ) );
     nmenu.addentry( D_SIZE, true, 's', "%s", _( "Set size" ) );
@@ -2902,6 +2912,7 @@ static void faction_edit_menu()
     nmenu.addentry( D_OPINION, true, 'o', "%s", _( "Set opinions" ) );
     nmenu.addentry( D_KNOWN, true, 'k', "%s", _( "Toggle Known by you" ) );
     nmenu.addentry( D_LONE, true, 'l', "%s", _( "Toggle Lone wolf" ) );
+    nmenu.addentry( D_THIEF, true, 't', "%s", _( "Reset steal mode" ) );
 
     nmenu.query();
     int value;
@@ -2935,6 +2946,9 @@ static void faction_edit_menu()
             break;
         case D_LONE:
             fac->lone_wolf_faction = !fac->lone_wolf_faction;
+            break;
+        case D_THIEF:
+            fac->steal_persist = std::nullopt;
             break;
     }
 }
@@ -3182,7 +3196,8 @@ static void debug_menu_game_state()
             creature_names_sorted.emplace_back( it );
         }
 
-        std::stable_sort( creature_names_sorted.begin(), creature_names_sorted.end(), []( auto a, auto b ) {
+        std::stable_sort( creature_names_sorted.begin(), creature_names_sorted.end(),
+        []( const auto & a, const auto & b ) {
             return a.second > b.second;
         } );
 
@@ -3259,6 +3274,7 @@ static void debug_menu_spawn_vehicle()
             tripoint_bub_ms dest = player_character.pos_bub();
             uilist veh_cond_menu;
             veh_cond_menu.text = _( "Vehicle condition" );
+            // Manual assignment of weird retvals because -1 is a sentinel value for uilist, but a valid int value of veh_spawn_status enum
             veh_cond_menu.addentry( 3, true, MENU_AUTOASSIGN, _( "Undamaged" ) );
             veh_cond_menu.addentry( 0, true, MENU_AUTOASSIGN, _( "Light damage" ) );
             veh_cond_menu.addentry( 2, true, MENU_AUTOASSIGN, _( "Disabled (tires or engine)" ) );
@@ -3267,7 +3283,8 @@ static void debug_menu_spawn_vehicle()
             if( veh_cond_menu.ret >= 0 && veh_cond_menu.ret < 4 ) {
                 // TODO: Allow picking this when add_vehicle has 3d argument
                 vehicle *veh = here.add_vehicle(
-                                   selected_opt, dest, -90_degrees, 100, veh_cond_menu.ret - 1, true, true );
+                                   selected_opt, dest, -90_degrees, 100, static_cast<veh_spawn_status>( veh_cond_menu.ret - 1 ),
+                                   true, true );
                 if( veh != nullptr ) {
                     here.board_vehicle( dest, &player_character );
                 }
@@ -3307,7 +3324,7 @@ static void display_talk_topic()
             }
             talk_topic_menu.query();
             if( talk_topic_menu.ret >= 0 && talk_topic_menu.ret < static_cast<int>( dialogue_ids.size() ) ) {
-                const std::string selected_topic = dialogue_ids[talk_topic_menu.ret];
+                const std::string &selected_topic = dialogue_ids[talk_topic_menu.ret];
                 a.talk_to( get_talker_for( selected_npc ), false, false, false, selected_topic );
             }
         }
@@ -4353,7 +4370,7 @@ void debug()
             g->toggle_debug_hour_timer();
             break;
         case debug_menu_index::CHANGE_TIME:
-            calendar::turn = calendar_ui::select_time_point( calendar::turn );
+            calendar::turn = calendar_ui::select_time_point( calendar::turn, _( "Select time point" ) );
             break;
         case debug_menu_index::FORCE_TEMP:
             debug_menu_force_temperature();
@@ -4605,6 +4622,13 @@ void debug()
 
         case debug_menu_index::IMGUI_DEMO:
             run_imgui_demo();
+            break;
+
+        case debug_menu_index::RELOAD_GPU_SHADERS:
+#if defined(TILES) && defined(USE_SDL3)
+            cata_shader::request_reprobe();
+            add_msg( _( "GPU shaders will reload on next frame." ) );
+#endif
             break;
 
         case debug_menu_index::TALK_TOPIC:
