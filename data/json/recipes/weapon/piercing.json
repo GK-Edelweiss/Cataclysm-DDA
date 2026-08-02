@@ -2482,7 +2482,7 @@
     "using": [ [ "soldering_standard", 10 ], [ "adhesive", 1 ] ],
     "proficiencies": [ { "proficiency": "prof_elec_soldering" }, { "proficiency": "prof_shock_weapons" } ],
     "qualities": [ { "id": "SCREW", "level": 1 } ],
-    "components": [ [ [ "fencing_foil_sharpened", 1 ] ], [ [ "fur", 1 ], [ "leather", 1 ] ], [ [ "tazer", 1 ] ], [ [ "cable", 10 ] ] ]
+    "components": [ [ [ "fencing_foil_sharpened", 1 ] ], [ [ "fur", 1 ], [ "leather", 1 ] ], [ [ "tazer", 1 ] ], [ [ "cable", 4 ] ] ]
   },
   {
     "type": "recipe",
@@ -2499,7 +2499,7 @@
     "using": [ [ "soldering_standard", 10 ], [ "adhesive", 1 ] ],
     "proficiencies": [ { "proficiency": "prof_elec_soldering" }, { "proficiency": "prof_shock_weapons" } ],
     "qualities": [ { "id": "SCREW", "level": 1 } ],
-    "components": [ [ [ "fencing_epee_sharpened", 1 ] ], [ [ "fur", 1 ], [ "leather", 1 ] ], [ [ "tazer", 1 ] ], [ [ "cable", 10 ] ] ]
+    "components": [ [ [ "fencing_epee_sharpened", 1 ] ], [ [ "fur", 1 ], [ "leather", 1 ] ], [ [ "tazer", 1 ] ], [ [ "cable", 4 ] ] ]
   },
   {
     "type": "recipe",
@@ -2516,7 +2516,7 @@
     "using": [ [ "soldering_standard", 10 ], [ "adhesive", 1 ] ],
     "qualities": [ { "id": "SCREW", "level": 1 } ],
     "proficiencies": [ { "proficiency": "prof_elec_soldering" }, { "proficiency": "prof_shock_weapons" } ],
-    "components": [ [ [ "fencing_sabre_sharpened", 1 ] ], [ [ "fur", 1 ], [ "leather", 1 ] ], [ [ "tazer", 1 ] ], [ [ "cable", 10 ] ] ]
+    "components": [ [ [ "fencing_sabre_sharpened", 1 ] ], [ [ "fur", 1 ], [ "leather", 1 ] ], [ [ "tazer", 1 ] ], [ [ "cable", 4 ] ] ]
   },
   {
     "type": "recipe",
@@ -2530,7 +2530,7 @@
     "components": [ [ [ "2x4", 1 ], [ "stick", 1 ] ], [ [ "fur", 2 ], [ "leather", 2 ] ] ],
     "steps": [
       {
-        "name": "Heating and cutting steel for  blade and tang",
+        "name": "Heating and cutting steel for blade and tang",
         "time": "30 m",
         "activity_level": "BRISK_EXERCISE",
         "using": [ [ "hotcut_any", 1 ] ],

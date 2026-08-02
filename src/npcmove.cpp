@@ -61,7 +61,6 @@
 #include "iexamine.h"
 #include "inventory.h"
 #include "item.h"
-#include "item_factory.h"
 #include "item_location.h"
 #include "item_transformation.h"
 #include "itype.h"
@@ -1884,7 +1883,10 @@ void npc::move()
                 }
                 action = npc_goto_destination;
             } else if( new_goal == "free_time" ) {
-                action = npc_worker_downtime;
+                action = address_needs();
+                if( action == npc_undecided ) {
+                    action = npc_worker_downtime;
+                }
             } else if( new_goal == "idle" ) {
                 if( guard_pos && is_guarding() ) {
                     // Persistent duty post: stay put, tend minor needs.
@@ -3511,9 +3513,9 @@ bool npc::enough_time_to_reload( const item &gun ) const
 {
     const map &here = get_map();
 
+    const std::optional<ammotype> at = item::ammotype_of( gun.ammo_default() );
     int rltime = item_reload_cost( gun, item( gun.ammo_default() ),
-                                   gun.ammo_capacity(
-                                       item_controller->find_template( gun.ammo_default() )->ammo->type ) );
+                                   at ? gun.ammo_capacity( *at ) : 0 );
     const float turns_til_reloaded = static_cast<float>( rltime ) / get_speed();
 
     const Creature *target = current_target();

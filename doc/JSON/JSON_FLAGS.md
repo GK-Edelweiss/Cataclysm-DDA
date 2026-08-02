@@ -177,9 +177,12 @@ Some armor flags, such as `WATCH` and `ALARMCLOCK` are compatible with other ite
 - ```ACTIVE_CLOAKING``` While active, drains UPS to provide invisibility.
 - ```ALARMCLOCK``` Has an alarm-clock feature.
 - ```ALLOWS_GASTROPOD_FOOT``` You can wear this item even if you have a gastropod foot instead of human legs.
+- ```ALLOWS_LEG_TENTACLES``` You can wear this item even if you have cephalopod tentacles instead of human legs.
 - ```ALLOWS_NATURAL_ATTACKS``` Doesn't prevent any natural attacks or similar benefits from mutations, fingertip razors, etc., like most items covering the relevant body part would.
 - ```ALLOWS_TAIL``` You can wear this leg-covering item even if you have a tail
 - ```ALLOWS_TALONS``` People with talon mutations still can wear this armor, that cover feet.
+- ```ALLOWS_WING_ARMS``` People whose arms have turned into wings can still wear this armor.
+- ```ALLOWS_WINGS``` People with independent wings growing from their backs can still wear this armor.
 - ```AURA``` This item goes in the outer aura layer, intended for metaphysical effects.
 - ```BAROMETER``` This gear is equipped with an accurate barometer (which is used to measure atmospheric pressure).
 - ```BELTED``` Layer for backpacks and things worn over outerwear.
@@ -218,6 +221,7 @@ Some armor flags, such as `WATCH` and `ALARMCLOCK` are compatible with other ite
 - ```NORMAL``` Items worn like normal clothing.  This is assumed as default.
 - ```NO_TAKEOFF``` Item with that flag can't be taken off.
 - ```NO_WEAR_EFFECT``` This gear doesn't provide any effects when worn (most jewelry).
+- ```NO_WING_GLIDING``` This gear prevents using your wings to glide when worn
 - ```OUTER```  Outer garment layer.
 - ```OVERSIZE``` Can always be worn no matter what encumbrance/mutations/bionics/etc, but prevents any other clothing being worn over this.
 - ```PADDED``` This armor counts as comfortable even if none of the specific materials are soft.
@@ -233,6 +237,11 @@ Some armor flags, such as `WATCH` and `ALARMCLOCK` are compatible with other ite
 - ```RAINPROOF``` Prevents the covered body-part(s) from getting wet in the rain.
 - ```REQUIRES_BALANCE``` Gear that requires a certain balance to be steady with.  If the player is hit while wearing, they have a chance to be downed.
 - ```RESTRICT_HANDS``` Prevents the player from wielding a weapon two-handed, forcing one-handed use if the weapon permits it.
+- ```ROBOFAC_ARM``` This item is a Hub 01 ARM exoskeleton.  It requires an implanted XM-ARM interface to function.
+- ```ROBOFAC_BACK``` This item is a Hub 01 BACK exoskeleton.  It requires an implanted XM-LEG interface and it must be worn with ARM and LEG exoskeletons to function.
+- ```ROBOFAC_LEG``` This item is a Hub 01 LEG exoskeleton.  It requires an implanted XM-LEG interface to function.
+- ```ROBOFAC_LENS_ACCESSORY``` This item is an accessory for a Hub 01 LENS helmet, and can only be worn with that helmet.
+- ```ROBOFAC_LENS_HELMET``` This item allows you to wear Hub 01 LENS accessories.
 - ```ROLLER_INLINE``` Faster, but less stable overall, the penalty for non-flat terrain is even harsher.
 - ```ROLLER_ONE``` A less stable and slower version of `ROLLER_QUAD`, still allows the player to move faster than walking speed.
 - ```ROLLER_QUAD```The medium choice between `ROLLER_INLINE` and `ROLLER_ONE`, while it is more stable, and moves faster, it also has a harsher non-flat terrain penalty than `ROLLER_ONE`.
@@ -326,6 +335,7 @@ Some armor flags, such as `WATCH` and `ALARMCLOCK` are compatible with other ite
 - ```NO_LIMB_FIRST_AID``` This bodypart cannot be bandaged or disinfected.
 - ```NON_FLESH_LIMB``` The bodypart is immune to a number of effects like poisoning or infection.
 - ```NONSTANDARD_BLOCK``` This limb is different enough that martial arts' arm/leg blocks aren't applicable - blocking with this limb is unlocked by reaching the MA's `nonstandard_block` level, unless the limb also has `ALWAYS_BLOCK`.  Either block flag is **required** for non-arm / non-leg limbs to be eligible to block.
+- ```PARTIAL_BIONIC_LIMB``` This limb is at least in part mechanical.
 - ```WINGS_2``` You can slow your fall, effectively reducing the height of falls by 2 levels, and ignore pit-like traps if two instances of the flag are present.
 - ```WING_ARMS``` Counts as a wing for `Character::can_fly` if two instances of the flag are present.
 
@@ -352,8 +362,6 @@ Character flags can be `trait_id`, `json_flag_id` or `flag_id`.  Some of these a
 - ```BG_SURVIVAL_STORY``` Given to NPC when it has a survival story.
 - ```BIO_IMMUNE``` You are immune to biological damage.
 - ```BLEED_IMMUNE``` Immune to bleeding.
-- ```BLEEDSLOW``` When bleeding, lose blood at 2/3 of the normal rate.
-- ```BLEEDSLOW2``` When bleeding, lose blood at 1/3 of the normal rate.
 - ```BLIND``` Makes you blind.
 - ```BLOCK_HUGE_ATTACKS``` Size limitations on blocking are ignored
 - ```BLOCK_SUPERNATURAL_HEALING``` Blocks supernatural healing effects, like magical healing spells, from taking effect.  This flag does not block EoC-based healing like using the u_hp() effect.
@@ -362,6 +370,7 @@ Character flags can be `trait_id`, `json_flag_id` or `flag_id`.  Some of these a
 - ```CANNOT_ATTACK``` A creature with this flag cannot attack (includes spellcasting).
 - ```CANNOT_CHANGE_TEMPERATURE``` A creature with this flag cannot change body temperature.
 - ```CANNOT_GAIN_EFFECTS``` A creature with this effect flag cannot gain effects.
+- ```CANNOT_GAIN_WEARINESS``` A character with this flag always has Fresh weariness. Weariness is still tracked in the background and accurately set when the flag wears off.
 - ```CANNOT_MOVE``` A creature with this flag cannot move.
 - ```CANNOT_TAKE_DAMAGE``` A creature with this flag cannot take any damage.
 - ```CANNOT_USE_COMPUTERS``` A creature with this flag cannot activate a computer terminal or use various computer functions (e.g. saving ebooks or reading efiles).
@@ -400,6 +409,7 @@ Character flags can be `trait_id`, `json_flag_id` or `flag_id`.  Some of these a
 - ```HERITAGE``` Turns a mutation with this flag light cyan on the list.  Currently used in mods for mutations that indicate non-human ancestry.
 - ```HIGH_GLARE``` Glare lasts twice as long
 - ```HUGE``` Changes your size to `creature_size::huge`.  Checked last of the size category flags, if no size flags are found your size defaults to `creature_size::medium`.
+- ```HUNGER_DISRUPTION``` You cannot tell how hungry you are 
 - ```HYPEROPIC``` You are far-sighted: close combat is hampered and reading is impossible without glasses.
 - ```INHALED_TOXIN_IMMUNE``` You are immune to any inhaled toxin that mouth environmental resistance would also protect against.
 - ```IMMUNE_HEARING_DAMAGE``` Immune to hearing damage from loud sounds.
@@ -434,6 +444,8 @@ Character flags can be `trait_id`, `json_flag_id` or `flag_id`.  Some of these a
 - ```ONE_STORY_FALL``` You can slow your fall, effectively reducing the height of it by 1 level.
 - ```PAIN_IMMUNE``` Character don't feel pain.
 - ```PARAIMMUNE``` You are immune to parasites.
+- ```PAUSE_BODYPART_INFECTION``` Infections on the bodypart that has an effect with this flag cannot kill you
+- ```PAUSE_INFECTIONS``` Infections on any bodypart cannot kill you while you have this flag
 - ```PHASE_MOVEMENT``` DEBUG. Completely ignores all impassable tiles, gravity checks, etc. and forces movement anyway.
 - ```PLANTBLOOD``` Your body drip veggy blood if wounded.
 - ```PORTAL_PROOF``` You are immune to personal portal storm effects.
@@ -839,8 +851,8 @@ These flags can be applied via JSON item definition to most items.  Not to be co
 - ```FLAMING``` This item is on fire, you deal additional fire damage using it.
 - ```FRAGILE_MELEE``` Fragile items that fall apart easily when used as a weapon due to poor construction quality and will break into components when broken.
 - ```FRESH_GRAIN``` This item is fresh-cut grain, and can be dried in a stook.
-- ```GASFILTER_MED``` This is a medium size gas filter cartridge, that is used as magazine for various gasmasks.
-- ```GASFILTER_SM``` This is a small size gas filter cartridge, that is used as magazine for various gasmasks.
+- ```GASFILTER_MED``` This is a medium size gas filter cartridge, that is used as magazine for various gas masks.
+- ```GASFILTER_SM``` This is a small size gas filter cartridge, that is used as magazine for various gas masks.
 - ```GAS_DISCOUNT``` Discount cards for the automated gas stations.
 - ```GAS_TANK``` This item can store gases.
 - ```GEMSTONE``` This is a gemstone, and you can put it in some jewelry.

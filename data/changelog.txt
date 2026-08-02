@@ -227,6 +227,19 @@ Direct route autodrive pathfinding
 Vehicle turrets and tools draw from multimag pockets
 Recipes can mark steps as unattended; player can wait, walk away, or set a timer
 Getting an Exodii Cyberframe locks you out of Hub 01 content
+CBMs can define replaced bodyparts, and removing a bionic limb removes CBMs in that limb
+Exodii can install and uninstall bionic limbs 
+Bionic limbs cannot be mended with splints, but can be repaired from 0
+More nuanced Hub 01-Exodii full cyborg aggression
+Charged tools can be used on unattended crafting steps
+Unattended liquid crafts wait for you to pour them
+Crafting faults
+Allows spawns offset from the origin like the beach, or deep in the forests to the west
+Gun and tool mods can retune multimag host consumption, firing modes, and pocket capacity
+Psi powers display `power radius` instead of `spell radius` in the powers UI
+Document HUNGER_DISRUPTION flag, apply in appropriate places 
+Add the `PAUSE_INFECTIONS` flag
+Add PAUSE_BODYPART_INFECTION flag, use in MoM
 
 
 ## Content:
@@ -485,6 +498,20 @@ Added the Final Showdown map extra, an injured survivor's last stand against a f
 Overgrown labyrinths
 Labyrinth specific CBMs:  anchor; laser reader; psyshield; artificial hair; blood biofactory; antigravity jump
 The Exodii can turn you into a full-blown cyborg
+If the Exodii trust you enough they'll give you a Cyberframe
+Dimension: the Scarlet Sea
+Challenge - Labyrinth Bound
+Expanding zombie weakpoints with vitals
+Some `a shadow?` attacked survivor camp mapgen
+A mission to negotiate trade between the Exodii and Free Merchants
+Add display type to certain food/drink products
+Overhaul the Portal Storm dungeon
+Add super-soldier serum, 29x-"Noonien"
+Add enchantment to modify bleeding rate
+Add european comics
+Add crashed XEDRA serum transport truck map extras
+Add serum `16x-"Armus"`
+Add `wyrmhound` mutant dogs
 
 
 ## Interface:
@@ -649,6 +676,7 @@ Migrate popups in vehicle interaction menu to ImGui
 Update to ImGui 1.91.9b
 Move appliance infobox to imgui
 Display some items by volume, weight or length instead of count
+Fix Crafting GUI text wrapping & don't offscreen recipe detail selection (`SPACE`)
 
 
 ## Mods:
@@ -1135,6 +1163,8 @@ XE Proficiency CBMs
 [BPerks/MM/Sorc] XP mods can level up more than once at a time
 Aftershock: Add industrial habitat building.
 Add "XedraWood: Stone and Sorcery" mod to the CDDA repository
+[XedraWood] Add magical tattoos and a profession that starts with them
+[Xedra Evolved] Add Follower dialogue topic to ask them to cast spells
 
 ## Balance:
 Visitors Passes and Freight Badges no longer reveal roads
@@ -1283,6 +1313,11 @@ Respect magazine_well when calculating encumbrance
 Nobody wants to cooperate with psychopaths
 Zombie corpses aren't useful
 Stepped many many weapon recipes
+Joint Torsion Ratchet CBM doesn't allow for perpetual motion cyborgs
+Zero cost spells remain zero cost even if encumbered
+Kelvar is now fireproof
+Add some more fluff nonfiction hardbacks
+Exodii traders dont accept currencies
 
 ## Bugfixes:
 clarify repeater mod installation and add a vanilla quest for them
@@ -1823,7 +1858,20 @@ Aftershock: Plasma degrades armors
 Stop spamming player log when NPCs are hot
 Stop ref center guard EOCs from firing in alternate dimensions
 Uncomfortable limbs must exist
-
+Fix Android black screen after turning the screen off
+Batch crafts no longer vanish when an unattended step's timeout is shorter than the batch-scaled craft time
+Labyrinth treasure room terminals work, and don't crash
+Worn flotation vest won't let you drown anymore
+Inventory organization crashes/freezes
+Fix fractional DoT displays
+Break monster grab if the monster was flung away
+[Xedra Evolved] Lilin only attack you in the main dimension
+NPCs will now get their spells from professions and hobbies during random NPC creation
+Fix surroundings menu scrolling
+Pocket options: allow interacting with a pocket with hidden contents (fixes crashes too)
+Allow NPCs to sleep during free_time
+NPCs default to allow_sleep ally rule
+Display multiple like items in car part removal on the same line with a count
 
 ## Performance:
 Slightly fewer allocations in npc::process_turn
@@ -1867,6 +1915,9 @@ Shrink level_cache by 48kb to save almost 1MB of ram (or more with allocator ove
 Save map size by not serializing unnecessary item components.
 Skip lightmap rebuild on idle frames
 Speedup highway placement by caching expensive math
+Speed up spawning item groups into containers
+Crafting optimizations
+Fix n^3 deserialization bug by not trying to stack unstackable items
 
 
 ## Infrastructure:
@@ -2111,6 +2162,13 @@ Fix lint findings reported by clang-tidy 21
 Bump clang-tidy CI baseline from LLVM 18 to LLVM 21
 Re-enable cata-large-stack-object check on LLVM 22
 SDL3 GPU shader pipeline for sprite variants
+Vendor plf colony/list verbatim under src/third-party
+Upgrade vendored plf_colony and plf_list to latest upstream
+Ignore root dotfiles by default in .gitignore
+Consume crafting tools per recipe step
+Abort and quarantine tileset atlas uploads interrupted by a renderer reset
+generic factory dimensions, multi-region support
+more region layouts + Voronoi library
 
 
 ## Build:
@@ -2147,7 +2205,8 @@ Fix maybe-uninitialized warning in unseal_and_spill_test
 Cache vcpkg installed packages in MSVC CI
 Build instruction and files for Visual Studio Code
 Demote GCC 16 -Wsfinae-incomplete to warning
-Fix SDL3 release artifacts for Linux, macOS, Windows
+Proper SDL support
+Migrate Android to SDL3 via CMake + prefab AAR; drop SDL2 customs; bump buildkit
 
 
 ## I18N and A11Y:

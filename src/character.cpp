@@ -260,6 +260,7 @@ json_flag_MYOPIC_IN_LIGHT_SUPERNATURAL( "MYOPIC_IN_LIGHT_SUPERNATURAL" );
 static const json_character_flag json_flag_MYOPIC_SUPERNATURAL( "MYOPIC_SUPERNATURAL" );
 static const json_character_flag json_flag_NIGHT_VISION( "NIGHT_VISION" );
 static const json_character_flag json_flag_NON_THRESH( "NON_THRESH" );
+static const json_character_flag json_flag_NO_WING_GLIDING( "NO_WING_GLIDING" );
 static const json_character_flag json_flag_NVG_GREEN( "NVG_GREEN" );
 static const json_character_flag json_flag_PHASE_MOVEMENT( "PHASE_MOVEMENT" );
 static const json_character_flag json_flag_PLANTBLOOD( "PLANTBLOOD" );
@@ -4335,6 +4336,13 @@ void Character::recalc_limb_energy_usage()
             bionic_limb_count++;
         }
     }
+    for( const bionic_id &bid : get_bionic_fueled_with_muscle() ) {
+        if( has_active_bionic( bid ) ) {
+            bionic_powercost = bionic_powercost * 50;
+        } else {
+            bionic_powercost = bionic_powercost * 5;
+        }
+    }
     arms_power_use = bionic_powercost;
     if( bionic_limb_count > 0 ) {
         arms_stam_mult = 1 - ( bionic_limb_count / total_limb_count );
@@ -4358,6 +4366,13 @@ void Character::recalc_limb_energy_usage()
         if( bp->has_flag( json_flag_BIONIC_LIMB ) ) {
             bionic_powercost += bp->power_efficiency;
             bionic_limb_count++;
+        }
+    }
+    for( const bionic_id &bid : get_bionic_fueled_with_muscle() ) {
+        if( has_active_bionic( bid ) ) {
+            bionic_powercost = bionic_powercost * 50;
+        } else {
+            bionic_powercost = bionic_powercost * 5;
         }
     }
     legs_power_use = bionic_powercost;
@@ -6691,7 +6706,7 @@ void Character::process_one_effect( effect &it, bool is_new )
         }
         if( is_new || it.activated( calendar::turn, "PAIN", val, reduced, mod ) ) {
             int pain_inc = bound_mod_to_vals( get_pain(), val, it.get_max_val( "PAIN", reduced ), 0 );
-            mod_pain( pain_inc );
+            mod_pain( pain_inc, it.get_bp() );
             if( pain_inc > 0 ) {
                 add_pain_msg( val, bp );
             }
@@ -7900,8 +7915,8 @@ bool Character::can_fly()
     if( has_flag( json_flag_GLIDE ) ) {
         return true;
     }
-    // TODO: Remove grandfathering traits in after Limb Stuff
-    if( count_flag( json_flag_WINGS_2 ) >= 2 || count_flag( json_flag_WING_ARMS ) >= 2 ) {
+    if( ( count_flag( json_flag_WINGS_2 ) >= 2 || count_flag( json_flag_WING_ARMS ) >= 2 ) &&
+        !worn_with_flag( json_flag_NO_WING_GLIDING ) ) {
 
         if( 100 * weight_carried() / weight_capacity() > 50 ) {
             return false;

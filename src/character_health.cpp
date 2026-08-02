@@ -164,6 +164,7 @@ static const json_character_flag json_flag_BIONIC_LIMB( "BIONIC_LIMB" );
 static const json_character_flag json_flag_BIONIC_SHOCKPROOF( "BIONIC_SHOCKPROOF" );
 static const json_character_flag json_flag_BLIND( "BLIND" );
 static const json_character_flag json_flag_CANNIBAL( "CANNIBAL" );
+static const json_character_flag json_flag_CANNOT_GAIN_WEARINESS( "CANNOT_GAIN_WEARINESS" );
 static const json_character_flag json_flag_CANNOT_TAKE_DAMAGE( "CANNOT_TAKE_DAMAGE" );
 static const json_character_flag json_flag_DEAF( "DEAF" );
 static const json_character_flag json_flag_GRAB( "GRAB" );
@@ -173,6 +174,7 @@ static const json_character_flag json_flag_NO_RADIATION( "NO_RADIATION" );
 static const json_character_flag json_flag_NO_THIRST( "NO_THIRST" );
 static const json_character_flag json_flag_NUMB( "NUMB" );
 static const json_character_flag json_flag_PAIN_IMMUNE( "PAIN_IMMUNE" );
+static const json_character_flag json_flag_PARTIAL_BIONIC_LIMB( "PARTIAL_BIONIC_LIMB" );
 static const json_character_flag json_flag_PSYCHOPATH( "PSYCHOPATH" );
 static const json_character_flag json_flag_SAPIOVORE( "SAPIOVORE" );
 static const json_character_flag json_flag_SPIRITUAL( "SPIRITUAL" );
@@ -1301,7 +1303,12 @@ void Character::update_health()
 
 int Character::weariness() const
 {
-    return activity_history.weariness();
+    // if we're magically inexhaustable or something, weariness is 0.
+    if( has_flag( json_flag_CANNOT_GAIN_WEARINESS ) ) {
+        return 0;
+    } else {
+        return activity_history.weariness();
+    }
 }
 
 int Character::weary_threshold() const
@@ -2578,9 +2585,6 @@ void Character::apply_damage( Creature *source, bodypart_id hurt, int dam,
     }
 
     int pain = 0;
-    if( !hurt->has_flag( json_flag_BIONIC_LIMB ) ) {
-        pain = mod_pain( dam / 2 );
-    }
 
     const bodypart_id &part_to_damage = hurt->main_part;
 
@@ -2819,7 +2823,9 @@ void Character::heal_bp( bodypart_id bp, int dam )
 
 void Character::heal( const bodypart_id &healed, int dam )
 {
-    if( !is_limb_broken( healed ) && ( dam != 0 || healed->has_flag( json_flag_ALWAYS_HEAL ) ) ) {
+    if( ( !is_limb_broken( healed ) || healed->has_flag( json_flag_BIONIC_LIMB ) ||
+          healed->has_flag( json_flag_PARTIAL_BIONIC_LIMB ) ) && ( dam != 0 ||
+                  healed->has_flag( json_flag_ALWAYS_HEAL ) ) ) {
         add_msg_debug( debugmode::DF_CHAR_HEALTH, "Base healing of %s = %d", body_part_name( healed ),
                        dam );
         if( healed->has_flag( json_flag_HEAL_OVERRIDE ) ) {
@@ -3355,7 +3361,7 @@ int Character::get_pain() const
     return p + Creature::get_pain();
 }
 
-int Character::mod_pain( int npain )
+int Character::mod_pain( int npain, const bodypart_id bp )
 {
     if( npain > 0 ) {
         double mult = enchantment_cache->get_value_multiply( enchant_vals::mod::PAIN );
@@ -3370,6 +3376,8 @@ int Character::mod_pain( int npain )
             npain = roll_remainder( npain * ( 1 + mult ) );
         }
         npain += enchantment_cache->get_value_add( enchant_vals::mod::PAIN );
+
+        npain *= bp->pain_mod;
 
         // no matter how powerful the enchantment if we are gaining pain we don't lose any
         npain = std::max( 0, npain );

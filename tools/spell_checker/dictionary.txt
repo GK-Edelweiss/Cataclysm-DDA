@@ -335,6 +335,7 @@ armguards
 Armitage
 armormaking
 armorsmithing
+Armus
 aromantic
 arowana
 arowanas
@@ -383,6 +384,7 @@ assistive
 asswagon
 asswipe
 Asterios
+asterix
 astrodon
 astrodons
 astrolaspis
@@ -1229,6 +1231,8 @@ Chilmark
 Chinese
 Ching
 chirality
+chirurgeon
+chirurgeons
 chirurgic
 chitinworking
 chk
@@ -1629,7 +1633,6 @@ Descartes
 descript
 desilo
 Desmodontinae
-dessicant
 destreza
 Det
 detune
@@ -3133,6 +3136,7 @@ ichthys
 ick
 iconical
 ICs
+idefix
 idolators
 IDW
 IDWs
@@ -3934,6 +3938,7 @@ Lorence
 Lorentz
 Los
 Losouarn
+lothar
 Lottie
 Lou
 Louan
@@ -4871,6 +4876,7 @@ nonsedated
 nonvalid
 nonverbally
 noob
+Noonien
 noosphere
 nopal
 nopales
@@ -4921,6 +4927,7 @@ numbnut
 numpad
 nums
 Nunez
+nurdle
 Nuz
 NV
 NVG
@@ -4940,6 +4947,7 @@ Oakley
 Oan
 Oanez
 Oates
+obelix
 Obrez
 obscura
 Oceania
@@ -5678,6 +5686,8 @@ renfields
 Reno
 repairwork
 replow
+Repo
+Repolymerization
 Represa
 reprime
 reptoid
@@ -6338,6 +6348,8 @@ smokable
 smoothbores
 smoots
 SMR
+smurf
+smurfs
 Smythe
 snakelet
 snakelets
@@ -6948,6 +6960,7 @@ Timorese
 Tinamidae
 Tindalos
 tink
+tintin
 Tipperary
 tiramisù
 tireplate
@@ -7378,7 +7391,6 @@ vermontsteel
 Verne
 versa
 Versailles
-vestigal
 vewwy
 VI
 viagra

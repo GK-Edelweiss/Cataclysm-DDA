@@ -6,7 +6,7 @@
       "|": "t_nl_metal_wall",
       "_": "t_nl_metal_floor",
       ".": "t_nl_catwalk",
-      "!": "t_nl_metal_wall_edge",
+      "!": "t_nl_metal_wall_border",
       "v": "t_nl_chasm",
       "+": "t_nl_door_c",
       "=": "t_nl_door_l",
@@ -34,7 +34,8 @@
       "ƥ": "t_nl_metal_floor",
       "Ṫ": "t_nl_metal_floor",
       "ϟ": "t_nl_metal_floor",
-      "ß": "t_nl_metal_floor"
+      "ß": "t_nl_metal_floor",
+      "W": "t_nl_metal_floor"
     },
     "furniture": {
       "â": "f_autodoc",
@@ -60,7 +61,8 @@
       "ƥ": "f_exodii_printer_small",
       "Ṫ": "f_metal_table",
       "ϟ": "f_capacitor",
-      "ß": "f_metal_bench"
+      "ß": "f_metal_bench",
+      "W": "f_workbench"
     },
     "monsters": {
       "_": { "monster": "GROUP_Labyrinth_Room", "density": 0.00015 },
@@ -74,7 +76,7 @@
       "|": "t_nl_metal_wall",
       "_": "t_nl_metal_floor",
       ".": "t_nl_catwalk",
-      "!": "t_nl_metal_wall_edge",
+      "!": "t_nl_metal_wall_border",
       "v": "t_nl_chasm",
       "+": "t_nl_door_c",
       "=": "t_nl_door_l",
@@ -124,7 +126,7 @@
         [ "t_nl_shrub_glowberries", 20 ],
         [ "t_marloss", 1 ]
       ],
-      "!": "t_nl_metal_wall_edge",
+      "!": "t_nl_metal_wall_border",
       "v": [ [ "t_nl_soil", 1 ], [ "t_nl_rock", 49 ] ],
       "%": "t_nl_shrub_glowberries",
       "+": "t_nl_door_c",
@@ -215,7 +217,7 @@
         [ "t_nl_shrub_glowberries", 20 ],
         [ "t_marloss", 1 ]
       ],
-      "!": "t_nl_metal_wall_edge",
+      "!": "t_nl_metal_wall_border",
       "v": [ [ "t_nl_soil", 1 ], [ "t_nl_rock", 49 ] ],
       "+": "t_nl_door_c",
       "=": "t_nl_door_l",
@@ -410,7 +412,7 @@
       "|": "t_nl_metal_wall",
       "_": "t_nl_metal_floor",
       ".": "t_nl_bridge",
-      "!": "t_nl_sewage_pipe_edge",
+      "!": "t_nl_sewage_pipe_border",
       "v": "t_nl_water_pool",
       "+": "t_nl_door_c",
       "=": "t_nl_door_l",

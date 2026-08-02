@@ -2149,7 +2149,6 @@
     "decay_messages": [ [ "You are sinking despite your best efforts.", "bad" ], [ "You wobble briefly downward before recovering.", "bad" ] ],
     "rating": "good",
     "max_duration": "7 days",
-    "max_intensity": 34,
     "flags": [ "LEVITATION", "CLIMB_FLYING", "ITEM_WATERPROOFING", "WATERWALKING" ]
   },
   {
@@ -2462,7 +2461,8 @@
         "condition": {
           "and": [
             { "not": { "u_has_effect": "effect_clair_astral_projection" } },
-            { "not": { "u_has_effect": "effect_biokin_perfected_motion" } }
+            { "not": { "u_has_effect": "effect_biokin_perfected_motion" } },
+            { "not": { "u_has_effect": "effect_mom_tindalos_hounds_corrupted_stride" } }
           ]
         },
         "values": [
@@ -2471,6 +2471,11 @@
             "multiply": { "math": [ "max( ( ( ( u_spell_level('teleport_stride') * -0.02 ) - 0.05 ) * psionic_power_modifiers() ), -0.6)" ] }
           }
         ]
+      },
+      {
+        "condition": { "u_has_effect": "effect_mom_tindalos_hounds_corrupted_stride" },
+        "values": [ { "value": "MOVE_COST", "multiply": -0.05 } ],
+        "ench_effects": [ { "effect": "effect_mom_tindalos_hounds_corrupted_stride_warning", "intensity": 1 } ]
       }
     ],
     "flags": [ "MUSCLE_VEH_BOOST" ]
@@ -2556,65 +2561,19 @@
   {
     "type": "effect_type",
     "id": "effect_vitakin_slow_bleeding",
-    "//": "Hidden effect, used as a tracker",
-    "name": [ "" ],
-    "desc": [ "" ],
-    "rating": "good",
-    "max_duration": "7 days"
-  },
-  {
-    "type": "effect_type",
-    "id": "effect_vitakin_slow_bleeding_01",
     "name": [ "Coagulation" ],
     "desc": [ "You bleed less than normal." ],
     "rating": "good",
-    "remove_message": "For just a moment, you feel your blood rushing through your veins.",
     "max_duration": "7 days",
-    "flags": [ "BLEEDSLOW" ],
     "enchantments": [
       {
         "values": [
           {
-            "value": "BLEED_STOP_BONUS",
-            "multiply": { "math": [ "( ( u_spell_level('vita_slow_bleeding') * 0.05 ) + 0.15 ) * psionic_power_modifiers()" ] }
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "type": "effect_type",
-    "id": "effect_vitakin_slow_bleeding_02",
-    "name": [ "Coagulation" ],
-    "desc": [ "You bleed much less than normal." ],
-    "rating": "good",
-    "remove_message": "For just a moment, you feel your blood rushing through your veins.",
-    "max_duration": "7 days",
-    "flags": [ "BLEEDSLOW2" ],
-    "enchantments": [
-      {
-        "values": [
-          {
-            "value": "BLEED_STOP_BONUS",
-            "multiply": { "math": [ "( ( u_spell_level('vita_slow_bleeding') * 0.05 ) + 0.15 ) * psionic_power_modifiers()" ] }
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "type": "effect_type",
-    "id": "effect_vitakin_slow_bleeding_03",
-    "name": [ "Coagulation" ],
-    "desc": [ "You bleed much less than normal and sometimes not at all." ],
-    "rating": "good",
-    "remove_message": "For just a moment, you feel your blood rushing through your veins.",
-    "max_duration": "7 days",
-    "blocks_effects": [ "bleed" ],
-    "flags": [ "BLEEDSLOW2" ],
-    "enchantments": [
-      {
-        "values": [
+            "value": "BLEEDING_RATE",
+            "multiply": {
+              "math": [ "clamp( ( ( ( u_spell_level('vita_slow_bleeding') * -0.03 ) + -0.15 ) * psionic_power_modifiers() ), -0.99, 0)" ]
+            }
+          },
           {
             "value": "BLEED_STOP_BONUS",
             "multiply": { "math": [ "( ( u_spell_level('vita_slow_bleeding') * 0.05 ) + 0.15 ) * psionic_power_modifiers()" ] }
@@ -2680,7 +2639,8 @@
     "show_intensity": false,
     "max_duration": "7 days",
     "base_mods": { "healing_rate": [ 20 ], "healing_head": [ 100 ], "healing_torso": [ 100 ] },
-    "scaling_mods": { "healing_rate": [ 6 ] }
+    "scaling_mods": { "healing_rate": [ 6 ] },
+    "flags": [ "PAUSE_BODYPART_INFECTION" ]
   },
   {
     "type": "effect_type",
